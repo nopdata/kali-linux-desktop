@@ -19,5 +19,6 @@ services:
         environment:
             - OPENVPN_OPTS=--pull-filter ignore "ifconfig-ipv6";--pull-filter ignore "route-ipv6"
             - VNC_PASSWORD=<your_password>
+            - LC_CTYPE=C.UTF-8
         sysctls:
             - net.ipv6.conf.all.disable_ipv6=0

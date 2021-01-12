@@ -40,6 +40,8 @@ RUN apt-get install whiptail -y
 # install gef
 RUN apt-get install gdb -y
 RUN apt-get install wget -y
+WORKDIR /tmp
+RUN wget -q -O- https://github.com/hugsy/gef/raw/master/scripts/gef.sh | sh
 
 # install pwntools
 RUN apt-get install libssl-dev -y
@@ -57,6 +59,47 @@ RUN apt-get install iputils-ping -y
 
 # install nmap
 RUN apt-get install nmap -y
+
+# install wpscan
+RUN apt-get install ruby ruby-dev libcurl4-openssl-dev make -y
+RUN mkdir /srv/tool
+WORKDIR /srv/tool
+RUN git clone https://github.com/wpscanteam/wpscan
+WORKDIR /srv/tool/wpscan
+RUN gem install bundler && bundler install --without test
+RUN gem install wpscan
+RUN wpscan --update
+
+# install vim
+RUN apt-get install vim -y
+
+# install binwalk
+RUN apt-get install binwalk -y
+
+# install john the ripper
+RUN apt-get install john -y
+RUN mkdir /srv/tool/wordlist
+WORKDIR /srv/tool/wordlist
+RUN wget https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt
+
+# install python2.7
+RUN apt-get install python2.7
+
+# download LinEnum
+WORKDIR /srv/tool
+RUN git clone https://github.com/rebootuser/LinEnum
+
+# install i386 library
+RUN dpkg --ad-architecture i386
+RUN apt-get update
+RUN apt-get install libc6:i386 libncurses5:i386 libstdc++6:i386 -y
+
+# update six package
+WORKDIR /tmp
+RUN wget https://files.pythonhosted.org/packages/6b/34/415834bfdafca3c5f451532e8a8d9ba89a21c9743a0c59fbd0205c7f9426/six-1.15.0.tar.gz
+RUN python3 -m pip install six-1.15.0.tar.gz
+
+
 # For installing other Kali metapackages check https://tools.kali.org/kali-metapackages
 # RUN apt-get update && apt-cache search kali-linux && apt-get install -y   \
 #         kali-tools-top10
